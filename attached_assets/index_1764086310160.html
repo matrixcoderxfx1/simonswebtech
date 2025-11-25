@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NAMWEBDEVS.na — Premium Web Design</title>
+<link rel="icon" href="img/thumbnail.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="brand">
+    <img src="img/logo.png" alt="logo" class="logo">
+    <div><h1>NAMDevSolutions.na</h1><div class="small-muted">Fast • Secure • Local</div></div>
+  </div>
+  <nav>
+    <a href="#demos">Demos</a>
+    <a href="#packages">Packages</a>
+    <a href="#request">Request</a>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <h2>Websites that work & get you clients</h2>
+    <p>Fast, secure, and conversion-focused websites for shops, restaurants and service businesses. Pick a package, add extras and send your request in one click.</p>
+    <div class="actions">
+      <a class="cta" href="#request">Get a Quote</a>
+      <a class="cta ghost" href="#demos">View Demos</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section id="demos">
+    <h2>Demos</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="img/demo1.jpg" alt="Business Demo">
+        <h3>Business Demo — Cafe</h3>
+        <p class="muted">Simple, menu-focused site with contact & hours.</p>
+        <div class="card-actions"><a class="cta-order" href="demo_business.html">Open Demo</a></div>
+      </div>
+      <div class="card">
+        <img src="img/demo2.jpg" alt="Shop Demo">
+        <h3>Shop Demo — Tech Goods</h3>
+        <p class="muted">Product cards, cart mockup & contact form.</p>
+        <div class="card-actions"><a class="cta-order" href="demo_shop.html">Open Demo</a></div>
+      </div>
+      <div class="card">
+        <img src="img/demo3.jpg" alt="Landing Demo">
+        <h3>Landing Demo — Product</h3>
+        <p class="muted">Lead capture, waitlist form & hero CTA.</p>
+        <div class="card-actions"><a class="cta-order" href="demo_landing.html">Open Demo</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="packages">
+    <h2>Packages & Pricing</h2>
+    <div class="package-row">
+      <div class="package-card">
+        <h3>Business</h3>
+        <div class="tier basic"><strong>Basic</strong><span class="price">N$250</span>
+          <ul><li>1 page</li><li>Contact link</li><li>1 revision</li></ul>
+        </div>
+        <div class="tier plus"><strong>Plus</strong><span class="price">N$450</span>
+          <ul><li>Up to 3 pages</li><li>Contact form</li><li>SEO basics</li></ul>
+        </div>
+        <div class="tier premium"><strong>Premium</strong><span class="price">N$1200</span>
+          <ul><li>Branding + premium design</li><li>Animations</li></ul>
+        </div>
+      </div>
+
+      <div class="package-card">
+        <h3>Shop / E-commerce</h3>
+        <div class="tier basic"><strong>Basic</strong><span class="price">N$350</span>
+          <ul><li>Product listing</li><li>Mock cart</li></ul>
+        </div>
+        <div class="tier plus"><strong>Plus</strong><span class="price">N$600</span>
+          <ul><li>Multi-page shop</li><li>SEO</li></ul>
+        </div>
+        <div class="tier premium"><strong>Premium</strong><span class="price">N$850</span>
+          <ul><li>Payment setup help</li><li>Advanced design</li></ul>
+        </div>
+      </div>
+
+      <div class="package-card">
+        <h3>Landing Pages</h3>
+        <div class="tier basic"><strong>Basic</strong><span class="price">N$150</span>
+          <ul><li>Single-page</li><li>Lead capture</li></ul>
+        </div>
+        <div class="tier plus"><strong>Plus</strong><span class="price">N$450</span>
+          <ul><li>Form integration</li><li>Analytics</li></ul>
+        </div>
+        <div class="tier premium"><strong>Premium</strong><span class="price">N$600</span>
+          <ul><li>Conversion optimisation</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="request" class="card">
+    <h2>Quick Request</h2>
+    <form id="quickForm">
+      <div class="row"><input name="name" placeholder="Your name" required><input name="email" placeholder="Email or WhatsApp" required></div>
+      <select name="type" required><option value="">Website type</option><option>Business</option><option>Shop</option><option>Landing</option><option>Upgrade</option><option>Custom</option></select>
+      <input name="budget" type="number" placeholder="Budget (NAD)">
+      <div class="checkbox-row">
+        <label><input type="checkbox" name="services" value="SEO"> SEO</label>
+        <label><input type="checkbox" name="services" value="Branding"> Branding</label>
+        <label><input type="checkbox" name="services" value="Animations"> Animations</label>
+      </div>
+      <textarea name="notes" placeholder="Notes"></textarea>
+      <div style="display:flex;gap:8px"><button class="cta" type="submit">Send Request</button><a id="waFallback" class="cta ghost" href="#">WhatsApp</a></div>
+      <p id="quickMsg" class="muted"></p>
+    </form>
+  </section>
+</div>
+
+<footer>© Namdev  — Built by Simon</footer>
+
+<script src="js/form.js"></script>
+</body>
+</html>
