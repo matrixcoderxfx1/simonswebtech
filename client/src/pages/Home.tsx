@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, ExternalLink, Code, Shield, Globe, ChevronRight, Menu, X, MessageSquare, Zap, MousePointerClick } from "lucide-react";
+import { Check, ArrowRight, ExternalLink, Code, Shield, Globe, ChevronRight, Menu, X, MessageSquare, Zap, MousePointerClick, AlertCircle, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -97,6 +97,9 @@ const PACKAGES: Record<CategoryType, Array<{ title: string, price: string, featu
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
+  const [formState, setFormState] = useState({ name: "", email: "", phone: "", projectType: "", budget: "", message: "" });
+  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [formError, setFormError] = useState<string>("");
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -109,6 +112,32 @@ export default function Home() {
   const handleCategorySelect = (category: CategoryType) => {
     setSelectedCategory(category);
     setTimeout(() => scrollToSection("packages"), 100);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus("loading");
+    setFormError("");
+
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
+
+      setFormStatus("success");
+      setFormState({ name: "", email: "", phone: "", projectType: "", budget: "", message: "" });
+      
+      setTimeout(() => setFormStatus("idle"), 3000);
+    } catch (error) {
+      setFormStatus("error");
+      setFormError(error instanceof Error ? error.message : "An error occurred");
+    }
   };
 
   return (
@@ -375,26 +404,47 @@ export default function Home() {
                 </div>
               </div>
 
-              <form className="space-y-4 relative z-10" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4 relative z-10" onSubmit={handleFormSubmit}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="John Doe" className="bg-black/20 border-white/10 focus:border-primary" />
+                    <Label htmlFor="name">Name *</Label>
+                    <Input 
+                      id="name" 
+                      placeholder="John Doe" 
+                      className="bg-black/20 border-white/10 focus:border-primary" 
+                      value={formState.name}
+                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" placeholder="+264 81..." className="bg-black/20 border-white/10 focus:border-primary" />
+                    <Input 
+                      id="phone" 
+                      placeholder="+264 81..." 
+                      className="bg-black/20 border-white/10 focus:border-primary" 
+                      value={formState.phone}
+                      onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
+                    />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" className="bg-black/20 border-white/10 focus:border-primary" />
+                  <Label htmlFor="email">Email *</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="john@example.com" 
+                    className="bg-black/20 border-white/10 focus:border-primary" 
+                    value={formState.email}
+                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                    required
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="type">Project Type</Label>
-                  <Select defaultValue={selectedCategory || undefined}>
+                  <Label htmlFor="type">Project Type *</Label>
+                  <Select value={formState.projectType} onValueChange={(val) => setFormState({ ...formState, projectType: val })}>
                     <SelectTrigger className="bg-black/20 border-white/10">
                       <SelectValue placeholder="Select project type" />
                     </SelectTrigger>
@@ -409,7 +459,7 @@ export default function Home() {
 
                 <div className="space-y-2">
                   <Label htmlFor="budget">Budget Range (NAD)</Label>
-                  <Select>
+                  <Select value={formState.budget} onValueChange={(val) => setFormState({ ...formState, budget: val })}>
                     <SelectTrigger className="bg-black/20 border-white/10">
                       <SelectValue placeholder="Select budget" />
                     </SelectTrigger>
@@ -423,11 +473,31 @@ export default function Home() {
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Project Details</Label>
-                  <Textarea id="message" placeholder="Tell us about your project..." className="bg-black/20 border-white/10 focus:border-primary min-h-[100px]" />
+                  <Textarea 
+                    id="message" 
+                    placeholder="Tell us about your project..." 
+                    className="bg-black/20 border-white/10 focus:border-primary min-h-[100px]" 
+                    value={formState.message}
+                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                  />
                 </div>
 
-                <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                  Send Request
+                {formStatus === "success" && (
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400">
+                    <CheckCircle className="h-5 w-5" />
+                    <span className="text-sm">Inquiry sent! We'll be in touch within 24 hours.</span>
+                  </div>
+                )}
+
+                {formStatus === "error" && (
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
+                    <AlertCircle className="h-5 w-5" />
+                    <span className="text-sm">{formError || "Failed to send inquiry. Please try again."}</span>
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={formStatus === "loading"}>
+                  {formStatus === "loading" ? "Sending..." : "Send Request"}
                 </Button>
               </form>
             </div>
