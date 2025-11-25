@@ -1,4 +1,4 @@
-# SimonTechSolutions - Flask Setup
+# SimonWebTech Digital - Flask Setup
 
 ## 🚀 Run Locally with Flask
 
@@ -16,7 +16,7 @@ pip install Flask==3.0.0 flask-cors==4.0.0 psycopg2-binary==2.9.9 python-dotenv=
 1. Start PostgreSQL service
 2. Create a database:
 ```bash
-createdb simontechsolutions
+createdb simonwebtech
 ```
 
 ### Step 3: Configure Environment

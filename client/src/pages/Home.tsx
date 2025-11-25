@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 // Assets
-import logoImg from "@assets/generated_images/modern_tech_logo_for_simontechsolutions.png";
+import logoImg from "/logo.png";
 import heroBg from "@assets/generated_images/dark_abstract_technology_background.png";
 import demoCafe from "@assets/generated_images/business_website_mockup.png";
 import demoShop from "@assets/generated_images/e-commerce_website_mockup.png";
@@ -151,7 +151,7 @@ export default function Home() {
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tight text-white">
-                Simon<span className="text-primary">Tech</span>Solutions
+                SimonWebTech<span className="text-primary">Digital</span>
               </h1>
               <p className="text-[10px] text-muted-foreground tracking-widest uppercase font-mono">Namibia's Finest</p>
             </div>
@@ -513,10 +513,10 @@ export default function Home() {
                <div className="h-8 w-8 rounded bg-primary/10 border border-primary/20 p-1">
                 <img src={logoImg} alt="Logo" className="h-full w-full object-contain" />
               </div>
-              <span className="font-bold text-white">SimonTechSolutions</span>
+              <span className="font-bold text-white">SimonWebTech Digital</span>
             </div>
             <div className="text-muted-foreground text-sm">
-              &copy; {new Date().getFullYear()} SimonTechSolutions. All rights reserved.
+              &copy; {new Date().getFullYear()} SimonWebTech Digital. All rights reserved.
             </div>
             <div className="text-sm text-muted-foreground flex items-center gap-1">
               Built with <span className="text-red-500">♥</span> by Simon

@@ -14,7 +14,7 @@ CORS(app)
 def get_db_connection():
     conn = psycopg2.connect(
         host=os.getenv('PGHOST', 'localhost'),
-        database=os.getenv('PGDATABASE', 'simontechsolutions'),
+        database=os.getenv('PGDATABASE', 'simonwebtech'),
         user=os.getenv('PGUSER', 'postgres'),
         password=os.getenv('PGPASSWORD'),
         port=os.getenv('PGPORT', 5432)
