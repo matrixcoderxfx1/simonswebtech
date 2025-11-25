@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Check, ArrowRight, ExternalLink, Code, Shield, Globe, ChevronRight, Menu, X, MessageSquare, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, ArrowRight, ExternalLink, Code, Shield, Globe, ChevronRight, Menu, X, MessageSquare, Zap, MousePointerClick } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 // Assets
 import logoImg from "@assets/generated_images/modern_tech_logo_for_simontechsolutions.png";
@@ -19,8 +20,83 @@ import catBusiness from "@assets/generated_images/professional_business_team.png
 import catShop from "@assets/generated_images/modern_digital_commerce_concept.png";
 import catLanding from "@assets/generated_images/digital_growth_and_analytics.png";
 
+type CategoryType = "business" | "ecommerce" | "landing";
+
+const PACKAGES: Record<CategoryType, Array<{ title: string, price: string, features: string[], isPopular?: boolean, image: string }>> = {
+  business: [
+    {
+      title: "Business Basic",
+      price: "N$ 250",
+      image: catBusiness,
+      features: ["1 Page Website", "Contact Link", "1 Revision", "Mobile Friendly", "Hosting Setup"],
+      isPopular: false
+    },
+    {
+      title: "Business Plus",
+      price: "N$ 450",
+      image: catBusiness,
+      features: ["Up to 3 Pages", "Contact Form", "SEO Basics", "Social Media Links", "2 Revisions", "Map Integration"],
+      isPopular: true
+    },
+    {
+      title: "Business Premium",
+      price: "N$ 1,200",
+      image: catBusiness,
+      features: ["5+ Pages", "Custom Branding", "Advanced Animations", "Premium Design", "SEO Pro", "Priority Support"],
+      isPopular: false
+    }
+  ],
+  ecommerce: [
+    {
+      title: "Shop Basic",
+      price: "N$ 350",
+      image: catShop,
+      features: ["Product Listing", "Mock Shopping Cart", "WhatsApp Order", "Mobile Responsive", "Basic Search"],
+      isPopular: false
+    },
+    {
+      title: "Shop Plus",
+      price: "N$ 600",
+      image: catShop,
+      features: ["Multi-page Shop", "Category Filtering", "Basic SEO", "Order Management", "Admin Dashboard"],
+      isPopular: true
+    },
+    {
+      title: "Shop Premium",
+      price: "N$ 850",
+      image: catShop,
+      features: ["Full Payment Setup", "Advanced Design", "Inventory System", "Customer Accounts", "Analytics Dashboard", "Priority Support"],
+      isPopular: false
+    }
+  ],
+  landing: [
+    {
+      title: "Landing Basic",
+      price: "N$ 150",
+      image: catLanding,
+      features: ["Single Page", "Lead Capture Form", "Fast Loading", "Mobile Optimized"],
+      isPopular: false
+    },
+    {
+      title: "Landing Plus",
+      price: "N$ 450",
+      image: catLanding,
+      features: ["Form Integration", "Analytics Setup", "Social Proof Section", "Email Auto-responder", "A/B Testing Ready"],
+      isPopular: true
+    },
+    {
+      title: "Landing Premium",
+      price: "N$ 600",
+      image: catLanding,
+      features: ["Conversion Optimization", "Custom Illustrations", "Advanced Tracking", "CRM Integration", "Copywriting Help"],
+      isPopular: false
+    }
+  ]
+};
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -28,6 +104,11 @@ export default function Home() {
       element.scrollIntoView({ behavior: "smooth" });
       setIsMenuOpen(false);
     }
+  };
+
+  const handleCategorySelect = (category: CategoryType) => {
+    setSelectedCategory(category);
+    setTimeout(() => scrollToSection("packages"), 100);
   };
 
   return (
@@ -49,7 +130,7 @@ export default function Home() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            <button onClick={() => scrollToSection("demos")} className="text-sm font-medium hover:text-primary transition-colors">Demos</button>
+            <button onClick={() => scrollToSection("solutions")} className="text-sm font-medium hover:text-primary transition-colors">Solutions</button>
             <button onClick={() => scrollToSection("packages")} className="text-sm font-medium hover:text-primary transition-colors">Packages</button>
             <button onClick={() => scrollToSection("about")} className="text-sm font-medium hover:text-primary transition-colors">About</button>
             <Button onClick={() => scrollToSection("request")} className="bg-primary text-primary-foreground hover:bg-primary/90">
@@ -67,7 +148,7 @@ export default function Home() {
               </SheetTrigger>
               <SheetContent side="right" className="bg-background border-l border-white/10">
                 <div className="flex flex-col gap-6 mt-10">
-                  <button onClick={() => scrollToSection("demos")} className="text-lg font-medium text-left">Demos</button>
+                  <button onClick={() => scrollToSection("solutions")} className="text-lg font-medium text-left">Solutions</button>
                   <button onClick={() => scrollToSection("packages")} className="text-lg font-medium text-left">Packages</button>
                   <button onClick={() => scrollToSection("about")} className="text-lg font-medium text-left">About</button>
                   <Button onClick={() => scrollToSection("request")} className="w-full">Get a Quote</Button>
@@ -129,8 +210,8 @@ export default function Home() {
               <Button onClick={() => scrollToSection("request")} size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-8 text-lg shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                 Start Your Project <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button onClick={() => scrollToSection("demos")} variant="outline" size="lg" className="h-14 px-8 text-lg border-white/10 bg-white/5 hover:bg-white/10 hover:text-white">
-                View Demos
+              <Button onClick={() => scrollToSection("solutions")} variant="outline" size="lg" className="h-14 px-8 text-lg border-white/10 bg-white/5 hover:bg-white/10 hover:text-white">
+                View Solutions
               </Button>
             </motion.div>
           </div>
@@ -176,69 +257,87 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Demos Section */}
-      <section id="demos" className="py-24 bg-background relative">
+      {/* Solutions / Categories Section (Replaces Demos) */}
+      <section id="solutions" className="py-24 bg-background relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Live Demos</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">See what we can build for you. Choose a template to start or request a custom design.</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Choose Your Solution</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Select a category to view our specialized packages. We have the perfect fit for your business.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <DemoCard 
-              title="The Modern Cafe" 
-              category="Business" 
+            <SolutionCard 
+              title="Business Website" 
+              category="business"
               image={demoCafe} 
-              description="Simple, menu-focused site with contact forms & opening hours."
+              description="Perfect for cafes, service providers, and local businesses looking to establish a strong online presence."
+              isActive={selectedCategory === "business"}
+              onClick={() => handleCategorySelect("business")}
             />
-            <DemoCard 
-              title="TechGoods Store" 
-              category="E-Commerce" 
+            <SolutionCard 
+              title="E-Commerce Store" 
+              category="ecommerce"
               image={demoShop} 
-              description="Full product catalog, shopping cart mockup, and payment flows."
+              description="Start selling online with a powerful, secure, and easy-to-manage online store."
+              isActive={selectedCategory === "ecommerce"}
+              onClick={() => handleCategorySelect("ecommerce")}
             />
-            <DemoCard 
-              title="SaaS Product Launch" 
-              category="Landing Page" 
+            <SolutionCard 
+              title="Landing Page" 
+              category="landing"
               image={demoLanding} 
-              description="High-conversion landing page with lead capture and analytics."
+              description="High-converting single pages designed to capture leads and promote specific products."
+              isActive={selectedCategory === "landing"}
+              onClick={() => handleCategorySelect("landing")}
             />
           </div>
         </div>
       </section>
 
       {/* Packages Section */}
-      <section id="packages" className="py-24 bg-black/20 relative overflow-hidden">
+      <section id="packages" className="py-24 bg-black/20 relative overflow-hidden min-h-[600px] transition-all duration-500">
         <div className="absolute inset-0 tech-grid-bg opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Transparent Pricing</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">No hidden fees. Just professional development packages tailored to your needs.</p>
-          </div>
+          
+          {!selectedCategory ? (
+            <div className="flex flex-col items-center justify-center h-64 text-center">
+               <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 animate-pulse">
+                <MousePointerClick className="h-10 w-10" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Select a Solution Above</h3>
+              <p className="text-muted-foreground">Click on a card in the "Choose Your Solution" section to see pricing packages.</p>
+            </div>
+          ) : (
+            <motion.div
+              key={selectedCategory}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="text-center mb-16">
+                <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono uppercase tracking-wider mb-3">
+                  {selectedCategory === 'business' && "Business Packages"}
+                  {selectedCategory === 'ecommerce' && "E-Commerce Packages"}
+                  {selectedCategory === 'landing' && "Landing Page Packages"}
+                </div>
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Transparent Pricing</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">Professional development packages tailored to your needs.</p>
+              </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <PackageCard 
-              title="Business Standard" 
-              price="N$ 1,200" 
-              image={catBusiness}
-              features={["Up to 5 Pages", "Contact Form", "SEO Basics", "Mobile Responsive", "1 Month Support"]}
-              isPopular={false}
-            />
-            <PackageCard 
-              title="E-Commerce Pro" 
-              price="N$ 2,500" 
-              image={catShop}
-              features={["Unlimited Products", "Payment Integration", "Inventory Management", "Customer Dashboard", "Advanced SEO", "3 Months Support"]}
-              isPopular={true}
-            />
-            <PackageCard 
-              title="Growth Landing" 
-              price="N$ 850" 
-              image={catLanding}
-              features={["Single High-Impact Page", "Lead Capture System", "Analytics Integration", "A/B Testing Ready", "Social Media Links"]}
-              isPopular={false}
-            />
-          </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {PACKAGES[selectedCategory].map((pkg, idx) => (
+                  <PackageCard 
+                    key={idx}
+                    title={pkg.title}
+                    price={pkg.price}
+                    image={pkg.image}
+                    features={pkg.features}
+                    isPopular={pkg.isPopular || false}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -295,7 +394,7 @@ export default function Home() {
 
                 <div className="space-y-2">
                   <Label htmlFor="type">Project Type</Label>
-                  <Select>
+                  <Select defaultValue={selectedCategory || undefined}>
                     <SelectTrigger className="bg-black/20 border-white/10">
                       <SelectValue placeholder="Select project type" />
                     </SelectTrigger>
@@ -359,21 +458,30 @@ export default function Home() {
   );
 }
 
-function DemoCard({ title, category, image, description }: { title: string, category: string, image: string, description: string }) {
+function SolutionCard({ title, category, image, description, isActive, onClick }: { title: string, category: string, image: string, description: string, isActive: boolean, onClick: () => void }) {
   return (
     <motion.div 
       whileHover={{ y: -5 }}
-      className="group relative rounded-xl overflow-hidden border border-white/10 bg-card hover:border-primary/50 transition-colors"
+      onClick={onClick}
+      className={cn(
+        "group relative rounded-xl overflow-hidden border bg-card transition-all cursor-pointer",
+        isActive ? "border-primary ring-2 ring-primary/50 shadow-[0_0_30px_rgba(6,182,212,0.2)]" : "border-white/10 hover:border-primary/50"
+      )}
     >
-      <div className="aspect-video overflow-hidden bg-muted">
+      <div className="aspect-video overflow-hidden bg-muted relative">
         <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <Button variant="secondary" className="gap-2">View Demo <ExternalLink className="h-4 w-4" /></Button>
+        <div className={cn(
+          "absolute inset-0 bg-black/50 transition-opacity flex items-center justify-center",
+          isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        )}>
+          <Button variant={isActive ? "default" : "secondary"} className="gap-2 pointer-events-none">
+            {isActive ? "Selected" : "View Packages"} <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
       <div className="p-6">
         <div className="text-xs font-mono text-primary mb-2 uppercase tracking-wider">{category}</div>
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{title}</h3>
+        <h3 className={cn("text-xl font-bold text-white mb-2 transition-colors", isActive && "text-primary")}>{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
     </motion.div>
@@ -383,8 +491,10 @@ function DemoCard({ title, category, image, description }: { title: string, cate
 function PackageCard({ title, price, features, isPopular, image }: { title: string, price: string, features: string[], isPopular: boolean, image: string }) {
   return (
     <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
       whileHover={{ y: -5 }}
-      className={`relative rounded-2xl overflow-hidden border bg-card flex flex-col ${isPopular ? 'border-primary shadow-[0_0_30px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}
+      className={`relative rounded-2xl overflow-hidden border bg-card flex flex-col ${isPopular ? 'border-primary shadow-[0_0_30px_rgba(6,182,212,0.15)] scale-105 z-10' : 'border-white/10'}`}
     >
       {isPopular && (
         <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-lg z-20">
@@ -419,7 +529,7 @@ function PackageCard({ title, price, features, isPopular, image }: { title: stri
         </ul>
         
         <Button className={`w-full ${isPopular ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-white/10 text-white hover:bg-white/20'}`}>
-          Choose Plan
+          Choose {title}
         </Button>
       </div>
     </motion.div>
