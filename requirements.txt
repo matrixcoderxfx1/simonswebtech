@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 Updated upstream
 flask
 
 flask
  Stashed changes
 gunicorn
+=======
+Flask==3.0.0
+gunicorn
+requests
+>>>>>>> 1afaed8 (Cleaned requirements.txt to fix deployment)

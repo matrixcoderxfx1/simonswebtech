@@ -16,7 +16,7 @@ def get_db_connection():
         host=os.getenv('PGHOST', 'localhost'),
         database=os.getenv('PGDATABASE', 'simonwebtech'),
         user=os.getenv('PGUSER', 'postgres'),
-        password=os.getenv('PGPASSWORD'),
+        password=os.getenv('admin'),
         port=os.getenv('PGPORT', 5432)
     )
     return conn

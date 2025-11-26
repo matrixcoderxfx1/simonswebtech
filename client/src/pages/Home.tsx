@@ -120,7 +120,8 @@ export default function Home() {
     setFormError("");
 
     try {
-      const response = await fetch("/api/inquiries", {
+     const apiUrl = import.meta.env.VITE_API_URL || "/api";
+const response = await fetch(`${apiUrl}/inquiries`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formState),
